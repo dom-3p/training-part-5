@@ -10,7 +10,6 @@ export class Feedback {
   actioned: boolean;
 
   @ApiProperty({ description: 'When this feedback item was created' })
-  @ApiProperty()
   createdAt: Date;
 
   @ApiProperty({
