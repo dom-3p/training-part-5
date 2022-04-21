@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FeedbackComment } from './feedback-comment';
 
 export class Feedback {
   @ApiProperty({ description: 'The feedback category' })
@@ -20,4 +21,7 @@ export class Feedback {
 
   @ApiProperty({ description: 'The id of the user lodging this feedback' })
   userId: number;
+
+  @ApiProperty({ description: 'The array of feedback comments' })
+  comments: FeedbackComment[];
 }
