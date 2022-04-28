@@ -15,6 +15,4 @@ export class FeedbackController {
   async getFeedback(): Promise<Feedback[]> {
     return await this.feedbackService.getFeedbackList();
   }
-
-  // Code comment
 }
