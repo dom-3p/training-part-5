@@ -2,8 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { FeedbackComment } from './feedback-comment';
 
 export class Feedback {
+  @ApiProperty({ description: 'The unique feedback id' })
+  id: number;
+
   @ApiProperty({ description: 'The feedback category' })
   category: string;
+
+  @ApiProperty({ description: 'The feedback description / body' })
+  description: string;
 
   @ApiProperty({
     description: 'A flag to show if this feedback item has been actioned',
@@ -23,5 +29,5 @@ export class Feedback {
   userId: number;
 
   @ApiProperty({ description: 'The array of feedback comments' })
-  comments: FeedbackComment[];
+  comments?: FeedbackComment[];
 }

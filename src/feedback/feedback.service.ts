@@ -1,20 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { getConnection } from 'typeorm';
 import { Feedback } from './dto/feedback';
+import { Feedback as FeedbackEntity } from './entities/feedback.entity';
+import { FeedbackHydratorService } from './feedback-hydrator.service';
 
 @Injectable()
 export class FeedbackService {
+  constructor(private readonly feedbackHydrator: FeedbackHydratorService) {}
+
   async getFeedbackList(): Promise<Feedback[]> {
-    let feedbackList: Feedback[] = [];
+    const feedbackRecords = await getConnection()
+      .getRepository(FeedbackEntity)
+      .createQueryBuilder('f')
+      .where('f.actioned = FALSE')
+      .orderBy('f.createdAt', 'DESC')
+      .getMany();
 
-    let feedback = new Feedback();
-    feedback.category = 'Too Hard';
-    feedback.actioned = false;
-    feedback.contentId = '762eb547-f4bf-40a5-a619-3714cdaeece8';
-    feedback.createdAt = new Date();
-    feedback.userId = 1;
+    return this.feedbackHydrator.FeedbackEntitiesToDto(feedbackRecords);
+  }
 
-    feedbackList.push(feedback);
+  async getFeedbackItem(id: number): Promise<Feedback> {
+    const feedbackRecord = await getConnection()
+      .getRepository(FeedbackEntity)
+      .createQueryBuilder('f')
+      .where('f.id = :id', { id: id })
+      .getOne();
 
-    return feedbackList;
+    return this.feedbackHydrator.FeedbackEntityToDto(feedbackRecord);
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Feedback } from './dto/feedback';
 import { FeedbackService } from './feedback.service';
 
@@ -12,7 +12,12 @@ export class FeedbackController {
   }
 
   @Get()
-  async getFeedback(): Promise<Feedback[]> {
+  async getFeedbackList(): Promise<Feedback[]> {
     return await this.feedbackService.getFeedbackList();
+  }
+
+  @Get(':id')
+  async getFeedbackItem(@Param('id') id: number): Promise<Feedback> {
+    return await this.feedbackService.getFeedbackItem(id);
   }
 }
