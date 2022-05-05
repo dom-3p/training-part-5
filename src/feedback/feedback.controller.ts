@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { Feedback } from './dto/feedback';
 import { FeedbackService } from './feedback.service';
 
@@ -7,8 +15,18 @@ export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
   @Post()
-  async createFeedback(@Body() feedback: Feedback): Promise<boolean> {
-    return true;
+  async createFeedback(@Body() feedback: Feedback): Promise<number> {
+    return await this.feedbackService.createFeedback(feedback);
+  }
+
+  @Put()
+  async updateFeedback(@Body() feedback: Feedback): Promise<Feedback> {
+    return await this.feedbackService.updateFeedback(feedback);
+  }
+
+  @Delete(':id')
+  async deleteFeedback(@Param('id') id: number): Promise<boolean> {
+    return await this.feedbackService.deleteFeedback(id);
   }
 
   @Get()

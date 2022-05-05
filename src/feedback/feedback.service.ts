@@ -28,4 +28,54 @@ export class FeedbackService {
 
     return this.feedbackHydrator.FeedbackEntityToDto(feedbackRecord);
   }
+
+  async createFeedback(feedback: Feedback): Promise<number> {
+    // TODO: Add validation!
+    const feedbackRec = await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(FeedbackEntity)
+      .values([
+        {
+          category: feedback.category,
+          description: feedback.description,
+          actioned: false,
+          contentId: feedback.contentId,
+          userId: feedback.userId,
+        },
+      ])
+      .execute();
+
+    return feedbackRec.identifiers[0].id;
+  }
+
+  async updateFeedback(feedback: Feedback): Promise<Feedback> {
+    // TODO: Add validation!
+    await getConnection()
+      .createQueryBuilder()
+      .update(FeedbackEntity)
+      .set({
+        category: feedback.category,
+        description: feedback.description,
+        actioned: feedback.actioned,
+      })
+      .where('id = :id', { id: feedback.id })
+      .execute();
+
+    const updatedFeedbackDto = await this.getFeedbackItem(feedback.id);
+
+    return updatedFeedbackDto;
+  }
+
+  async deleteFeedback(id: number): Promise<boolean> {
+    // TODO: Add validation!
+    await getConnection()
+      .createQueryBuilder()
+      .delete()
+      .from(FeedbackEntity)
+      .where('id = :id', { id: id })
+      .execute();
+
+    return true;
+  }
 }
